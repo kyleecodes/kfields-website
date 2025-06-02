@@ -1,24 +1,37 @@
 import Link from "next/link";
 import { BlogTagsCard } from "../../../components/cards/BlogTagsCard";
+import { PostTagBadge } from "../../../components/common/PostTagBadge";
 import { getAllPosts, PostData } from "../../../lib/posts";
 
-export default async function BlogHome() {
+export default async function BlogHome({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const params = await searchParams;
   const posts = await getAllPosts();
+  const tag = params?.tag;
+  const filteredPosts = tag
+    ? posts.filter((post: PostData) => post.tag === tag)
+    : posts;
   return (
-    <main className="grid grid-rows-[auto_1fr_auto] items-start justify-items-center min-h-screen p-4 pb-10 gap-8 sm:p-10 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="text-3xl sm:text-4xl font-bold"> blog</h1>
+    <main className="max-w-2xl mx-auto px-4 py-12 flex flex-col gap-6 font-[family-name:var(--font-geist-sans)]">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-2">blog</h1>
       <BlogTagsCard />
-      {posts.map((post: PostData) => (
-        <div key={post.title}>
-          <Link
-            href={`/blog/${encodeURIComponent(post.title)}`}
-            className="text-xl font-semibold hover:underline"
-          >
-            {post.title}
-          </Link>
-          <h3 className="text-l">{post.date}</h3>
-        </div>
-      ))}
+      <section className="flex flex-col gap-6 mt-4">
+        {filteredPosts.map((post: PostData) => (
+          <div key={post.id} className="border-b pb-4">
+            <Link
+              href={`/blog/${encodeURIComponent(post.id)}`}
+              className="text-xl font-semibold hover:underline text-left block"
+            >
+              {post.title}
+            </Link>
+            <h3 className="text-sm text-gray-500 mt-1 mb-2">{post.date}</h3>
+            <PostTagBadge tag={post.tag} />
+          </div>
+        ))}
+      </section>
     </main>
   );
 }
