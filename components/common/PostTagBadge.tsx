@@ -4,7 +4,8 @@ const TAG_COLORS: Record<string, string> = {
   programming: "#5A7D9A",
   TIL: "#9CA88D",
   productivity: "#7E6A93",
-  all: "#36454F",
+  community: "#d78f99",
+  all: "#36454F"
 };
 
 interface PostTagBadgeProps {

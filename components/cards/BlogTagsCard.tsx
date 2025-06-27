@@ -6,6 +6,7 @@ export const BlogTagsCard = () => {
       <PostTagBadge tag="programming" />
       <PostTagBadge tag="TIL" />
       <PostTagBadge tag="productivity" />
+      <PostTagBadge tag="community" />
       <PostTagBadge tag="all" />
     </div>
   );
