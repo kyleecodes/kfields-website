@@ -12,8 +12,8 @@ export default async function BlogHome({
   const posts = await getAllPosts();
   const tag = params?.tag;
   const filteredPosts = tag
-    ? posts.filter((post: PostData) => post.tag === tag)
-    : posts;
+    ? posts.filter((post): post is PostData => !!post && post.tag === tag)
+    : posts.filter((post): post is PostData => !!post);
   return (
     <main className="max-w-2xl mx-auto px-4 py-12 flex flex-col gap-6 font-[family-name:var(--font-geist-sans)]">
       <h1 className="text-3xl sm:text-4xl font-bold mb-2">blog</h1>

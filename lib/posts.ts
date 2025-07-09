@@ -26,16 +26,13 @@ export async function getPostData(id: string): Promise<PostData> {
   }
   const fileContents: string = fs.readFileSync(fullPath, "utf8");
 
-  // Use gray-matter to parse the post metadata section
   const matterResult: matter.GrayMatterFile<string> = matter(fileContents);
 
-  // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
     .process(matterResult.content);
   const contentHtml: string = processedContent.toString();
 
-  // Combine the data with the id and contentHtml
   return {
     id,
     title: matterResult.data.title as string,
@@ -51,6 +48,11 @@ export async function getAllPosts() {
     const id = fileName.replace(/\.mdx?$/, "");
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, "utf8");
+    const validFile = fs.lstatSync(fullPath).isFile();
+    if (!validFile) {
+        console.log(`Skipping ${fileContents}: not a valid file.`);
+        return;
+      }
     const matterResult = matter(fileContents);
     return {
       id,

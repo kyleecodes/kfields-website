@@ -40,6 +40,11 @@ function renameFiles(dir) {
     if (file.endsWith('.mdx') && file.startsWith('test')) {
       const filePath = path.join(dir, file);
       const content = fs.readFileSync(filePath, 'utf-8');
+      const validFile = fs.lstatSync(filePath).isFile();
+      if (!validFile) {
+        console.log(`Skipping ${file}: not a valid file.`);
+        return;
+      }
 
       const { date, title } = parseFrontmatter(content);
 
